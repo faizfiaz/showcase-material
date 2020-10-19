@@ -1,4 +1,4 @@
-package com.pawoon.faizf.showcaselibrary;
+package com.github.faizf.showcaselibrary;
 
 import android.app.Activity;
 import android.support.v4.app.DialogFragment;
