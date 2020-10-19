@@ -68,7 +68,7 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     private int mContentRightMargin;
     private boolean mDismissOnTouch = false;
     private boolean mShouldRender = false; // flag to decide when we should actually render
-    private boolean mRenderOverNav = false;
+    private boolean mRenderOverNav = true;
     private int mMaskColour;
     private IAnimationFactory mAnimationFactory;
     private boolean mShouldAnimate = true;
@@ -163,8 +163,8 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
             }
         }
         mContentBox = contentView.findViewById(R.id.content_box);
-        mDismissButton = contentView.findViewById(R.id.tv_skip);
-        mSkipButton = contentView.findViewById(R.id.tv_dismiss);
+        mDismissButton = contentView.findViewById(R.id.tv_dismiss);
+        mSkipButton = contentView.findViewById(R.id.tv_skip);
         mDismissButton.setOnClickListener(this);
         mSkipButton.setOnClickListener(this);
     }
@@ -190,8 +190,8 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
         if (!mShouldRender) return;
 
         // get current dimensions
-        final int width = getMeasuredWidth();
-        final int height = getMeasuredHeight();
+        final int width = getMeasuredWidth() + 200;
+        final int height = getMeasuredHeight() + 800;
 
         // don't bother drawing if there is nothing to draw on
         if (width <= 0 || height <= 0) return;
