@@ -655,6 +655,11 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
             return this;
         }
 
+        public Builder setLayout(int layout, int titleId, int contentId, String title, String content) {
+            showcaseView.setLayout(layout, titleId, contentId, title, content);
+            return this;
+        }
+
         /**
          * Set the title text shown on the ShowcaseView.
          */
