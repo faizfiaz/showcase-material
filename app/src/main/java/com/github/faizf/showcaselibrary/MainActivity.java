@@ -1,4 +1,4 @@
-package com.pawoon.faizf.showcaselibrary;
+package com.github.faizf.showcaselibrary;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

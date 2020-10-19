@@ -60,6 +60,7 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     private TextView mTitleTextView;
     private TextView mContentTextView;
     private TextView mDismissButton;
+    private TextView mSkipButton;
     private int mGravity;
     private int mContentBottomMargin;
     private int mContentTopMargin;
@@ -85,6 +86,7 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     private boolean mDismissOnTargetTouch = true;
 
     private boolean topBottom;
+    private boolean isFullWidth;
     private View contentView;
 
     private int layout;
@@ -135,18 +137,27 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
         mDismissButton.setOnClickListener(this);
     }
 
-    private void updateLayout(int layout, int id, String content) {
+    private void updateLayout(int layout, int titleId, int contentId, String title, String content) {
         contentView = LayoutInflater.from(getContext()).inflate(layout, this, true);
         try {
-            TextView name;
-            name = findViewById(id);
-            name.setText(content);
+            TextView tvTitle;
+            tvTitle = findViewById(titleId);
+            tvTitle.setText(title);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            TextView tvContent;
+            tvContent = findViewById(contentId);
+            tvContent.setText(content);
         } catch (Exception e) {
             e.printStackTrace();
         }
         mContentBox = contentView.findViewById(R.id.content_box);
-        mDismissButton = contentView.findViewById(R.id.tv_dismiss);
+        mDismissButton = contentView.findViewById(R.id.tv_skip);
+        mSkipButton = contentView.findViewById(R.id.tv_dismiss);
         mDismissButton.setOnClickListener(this);
+        mSkipButton.setOnClickListener(this);
     }
 
     /*this for get view to get any component in layout*/
@@ -277,7 +288,15 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
      */
     @Override
     public void onClick(View v) {
-        hide();
+        if (v == mDismissButton)
+            hide();
+        else {
+            if (mListeners != null) {
+                for (IShowcaseListener listener : mListeners) {
+                    listener.onShowcaseSkip(this);
+                }
+            }
+        }
     }
 
     /**
@@ -336,12 +355,12 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
                     if (xPos > midXPoint) {
                         mContentTopMargin = 0;
                         mContentLeftMargin = 0;
-                        mContentRightMargin = width - rightPos;
+                        mContentRightMargin = isFullWidth ? 0 : width - rightPos;
                         mContentBottomMargin = (height - yPos) + radius + mShapePadding + 24;
                         mGravity = Gravity.BOTTOM | Gravity.RIGHT;
                     } else {
                         mContentTopMargin = 0;
-                        mContentLeftMargin = leftPos;
+                        mContentLeftMargin = isFullWidth ? 0 : leftPos;
                         mContentRightMargin = 0;
                         mContentBottomMargin = (height - yPos) + radius + mShapePadding + 24;
                         mGravity = Gravity.BOTTOM | Gravity.LEFT;
@@ -350,12 +369,12 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
                     if (xPos > midXPoint) {
                         // target is in upper half of screen, we'll sit below it
                         mContentLeftMargin = 0;
-                        mContentRightMargin = width - rightPos;
+                        mContentRightMargin = isFullWidth ? 0 : width - rightPos;
                         mContentTopMargin = yPos + radius + mShapePadding + 24;
                         mContentBottomMargin = 0;
                         mGravity = Gravity.TOP | Gravity.RIGHT;
                     } else {
-                        mContentLeftMargin = leftPos;
+                        mContentLeftMargin = isFullWidth ? 0 : leftPos;
                         mContentRightMargin = 0;
                         mContentTopMargin = yPos + radius + mShapePadding + 24;
                         mContentBottomMargin = 0;
@@ -468,6 +487,10 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
 
     private void setTopBottom(boolean condition) {
         topBottom = condition;
+    }
+
+    private void setFullWidth(boolean condition) {
+        isFullWidth = condition;
     }
 
     private void setTitleTextColor(int textColour) {
@@ -632,11 +655,6 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
             return this;
         }
 
-        public Builder setLayout(int layout, int id, String content) {
-            showcaseView.setLayout(layout, id, content);
-            return this;
-        }
-
         /**
          * Set the title text shown on the ShowcaseView.
          */
@@ -749,7 +767,7 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
             return this;
         }
 
-        public Builder setDismissListenerClickAction(View.OnClickListener listenerClickAction){
+        public Builder setDismissListenerClickAction(View.OnClickListener listenerClickAction) {
             showcaseView.overrideDismissListenerAction(listenerClickAction);
             return this;
         }
@@ -852,9 +870,9 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
         updateLayout(layout);
     }
 
-    private void setLayout(int layout, int id, String content) {
+    private void setLayout(int layout, int titleId, int contentId, String title, String content) {
         this.layout = layout;
-        updateLayout(layout, id, content);
+        updateLayout(layout, titleId, contentId, title, content);
     }
 
     private void singleUse(String showcaseID) {

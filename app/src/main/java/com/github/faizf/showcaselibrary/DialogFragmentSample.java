@@ -1,4 +1,4 @@
-package com.pawoon.faizf.showcaselibrary;
+package com.github.faizf.showcaselibrary;
 
 import android.app.Dialog;
 import android.os.Bundle;
