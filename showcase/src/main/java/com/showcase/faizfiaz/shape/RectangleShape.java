@@ -4,6 +4,8 @@ package com.showcase.faizfiaz.shape;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
+import android.os.Build;
 
 import com.showcase.faizfiaz.target.Target;
 
@@ -16,6 +18,7 @@ public class RectangleShape implements Shape {
     private int height = 0;
     private boolean adjustToTarget = true;
     private boolean b;
+    private int rounded;
 
     private Rect rect;
 
@@ -23,6 +26,14 @@ public class RectangleShape implements Shape {
         this.width = width;
         this.height = height;
         this.b = drawSpotLight;
+        init();
+    }
+
+    public RectangleShape(int width, int height, boolean drawSpotLight, int rounded) {
+        this.width = width;
+        this.height = height;
+        this.b = drawSpotLight;
+        this.rounded = rounded;
         init();
     }
 
@@ -55,13 +66,34 @@ public class RectangleShape implements Shape {
     public void draw(Canvas canvas, Paint paint, int x, int y, int padding) {
         if (b) {
             if (!rect.isEmpty()) {
-                canvas.drawRect(
-                        rect.left + x - padding,
-                        rect.top + y - padding,
-                        rect.right + x + padding,
-                        rect.bottom + y + padding,
-                        paint
-                );
+                if (rounded > 0) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        canvas.drawRoundRect(
+                                rect.left + x - padding,
+                                rect.top + y - padding,
+                                rect.right + x + padding,
+                                rect.bottom + y + padding,
+                                rounded,
+                                rounded,
+                                paint
+                        );
+                    } else {
+                        RectF rectf = new RectF(rect.left + x - padding,
+                                rect.top + y - padding,
+                                rect.right + x + padding,
+                                rect.bottom + y + padding);
+                        canvas.drawRoundRect(rectf, rounded, rounded, paint);
+                    }
+                } else {
+                    canvas.drawRect(
+                            rect.left + x - padding,
+                            rect.top + y - padding,
+                            rect.right + x + padding,
+                            rect.bottom + y + padding,
+                            paint
+                    );
+                }
+
             }
         }
     }
