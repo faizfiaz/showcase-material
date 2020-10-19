@@ -691,6 +691,11 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
             return this;
         }
 
+        public Builder setFullWidth(boolean condition) {
+            showcaseView.setFullWidth(condition);
+            return this;
+        }
+
         /**
          * Set the content text shown on the ShowcaseView.
          */
