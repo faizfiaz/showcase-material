@@ -5,7 +5,9 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 
 import com.showcase.faizfiaz.MaterialShowcaseView;
+import com.showcase.faizfiaz.shape.CircleShape;
 import com.showcase.faizfiaz.shape.RectangleShape;
+import com.showcase.faizfiaz.target.ViewTarget;
 
 
 /**
@@ -18,8 +20,9 @@ public class ShowCaseUtil {
         return new MaterialShowcaseView.Builder(activity, dialogFragment)
                 .setTarget(target)
                 .setLayout(layout)
-                .setShape(new RectangleShape(width, height, drawSpotLight))
+                .setShape(new CircleShape(new ViewTarget(target)))
                 .setShapePadding(0)
+                .setFullWidth(true)
                 .setTopBottom(topBottom)
                 .setMaskColour(activity.getResources().getColor(R.color.blackTrans))
                 .show(dialogFragment != null);
