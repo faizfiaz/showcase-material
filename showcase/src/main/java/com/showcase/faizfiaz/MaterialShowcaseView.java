@@ -137,7 +137,7 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
         mDismissButton.setOnClickListener(this);
     }
 
-    private void updateLayout(int layout, int titleId, int contentId, String title, String content) {
+    private void updateLayout(int layout, int titleId, int contentId, int counterId, String title, String content, String counter) {
         contentView = LayoutInflater.from(getContext()).inflate(layout, this, true);
         try {
             TextView tvTitle;
@@ -152,6 +152,15 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
             tvContent.setText(content);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (counter != null) {
+            try {
+                TextView tvCounter;
+                tvCounter = findViewById(counterId);
+                tvCounter.setText(counter);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         mContentBox = contentView.findViewById(R.id.content_box);
         mDismissButton = contentView.findViewById(R.id.tv_skip);
@@ -655,8 +664,8 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
             return this;
         }
 
-        public Builder setLayout(int layout, int titleId, int contentId, String title, String content) {
-            showcaseView.setLayout(layout, titleId, contentId, title, content);
+        public Builder setLayout(int layout, int titleId, int contentId, int counterId, String title, String content, String counter) {
+            showcaseView.setLayout(layout, titleId, contentId, counterId, title, content, counter);
             return this;
         }
 
@@ -875,9 +884,9 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
         updateLayout(layout);
     }
 
-    private void setLayout(int layout, int titleId, int contentId, String title, String content) {
+    private void setLayout(int layout, int titleId, int contentId, int counterId, String title, String content, String counter) {
         this.layout = layout;
-        updateLayout(layout, titleId, contentId, title, content);
+        updateLayout(layout, titleId, contentId, counterId, title, content, counter);
     }
 
     private void singleUse(String showcaseID) {
